@@ -1,0 +1,17 @@
+[
+  {
+    "price":60.0,
+    "name":"Book14",
+    "mainAuthorName":"Book14-MainAuthor"
+  },
+  {
+    "price":53.55,
+    "name":"Book13",
+    "mainAuthorName":"Book13-MainAuthor"
+  },
+  {
+    "price":55.55,
+    "name":"Book1",
+    "mainAuthorName":"Book1-MainAuthor"
+  }
+]

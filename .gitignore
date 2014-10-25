@@ -1,7 +1,9 @@
 *.class
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+.settings/
+target/
+.classpath
+.project
 
 # Package Files #
 *.jar

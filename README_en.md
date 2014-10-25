@@ -1,17 +1,17 @@
 Bean-query
 ==========
 
-[Click Here](./README_en.md) for English version.
+[点击这里](./README.md) 查看中文版.
 
-BeanQuery 是一个把对象转换为Map的Java工具库。支持选择Bean中的一些属性，对结果进行排序和按照条件查询。不仅仅可以作用于顶层对象，也可以作用于子对象。
+BeanQuery is a Java lib used to transfer a collection of java bean to a list of map. You use it to query some properties of the beans, sort the result and query using conditions. Not only for the beans, it also working for the nested objects.
 
-BeanQuery的使用非常简单也很直接，例子代码如下：
+Usage of BeanQuery is simple, sample code below:
 ```java
-//静态导入BeanQuery
+//import the BeanQuery
 import static cn.jimmyshi.beanquery.BeanQuery.*;
 
 
-//使用 select、from、where、orderBy、desc和asc来组装一个Query，然后执行execute方法来获得结果。
+//use select/from/where/orderBy/desc/asc to composite a query and execute it to get the result
 List<Map<String, Object>> result = select("price,name,mainAuthor.name as mainAuthorName")
     .from(bookCollection)
     .where(
@@ -29,8 +29,7 @@ List<Map<String, Object>> result = select("price,name,mainAuthor.name as mainAut
     .orderBy("name").desc()
     .execute();
 ```
-
-在上面的例子中，bookCollection的内容如下所示(json格式)
+In this sample, the content of bookCollection as below(in json format)
 ```json
 [
   {
@@ -120,7 +119,8 @@ List<Map<String, Object>> result = select("price,name,mainAuthor.name as mainAut
   }
 ]
 ```
-执行完之后，则result的内容如下所示(json格式)
+
+After execution of the sample code, value of result as below(in json format)
 ```json
 [
   {
@@ -140,3 +140,6 @@ List<Map<String, Object>> result = select("price,name,mainAuthor.name as mainAut
   }
 ]
 ```
+
+
+

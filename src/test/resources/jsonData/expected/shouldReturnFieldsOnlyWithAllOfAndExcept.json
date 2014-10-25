@@ -1,0 +1,41 @@
+[
+  {
+    "name":"Book1",
+    "price":50.55,
+    "mainAuthor":{
+      "name":"Book1-MainAuthor",
+      "address":{
+        "address":"Shenzhen Guangdong China",
+        "postCode":"518000"
+      },
+      "birthDate":"1982-01-30T14:52:39"
+    }
+
+  },
+  {
+    "name":"Book2",
+    "price":6.66,
+    "mainAuthor":{
+      "name":"Book2-MainAuthor",
+      "address":{
+        "address":"Shenzhen Guangdong China",
+        "postCode":"518005"
+      },
+      "birthDate":"1982-01-30T14:52:39"
+    }
+
+  },
+  {
+    "name":"Book3",
+    "price":6.66,
+    "mainAuthor":{
+      "name":"Book3-MainAuthor",
+      "address":{
+        "address":"Shenzhen Guangdong China",
+        "postCode":"518005"
+      },
+      "birthDate":"1982-01-30T14:52:39"
+    }
+
+  }
+]

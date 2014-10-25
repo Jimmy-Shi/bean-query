@@ -1,0 +1,21 @@
+[
+  {
+    "price":50.55,
+    "name":"Book1",
+    "book1AuthorAddress":{
+      "address":"Shenzhen Guangdong China",
+      "postCode":"518004"
+    }
+
+  },
+  {
+    "name":"Book2",
+    "price":6.66,
+    "book1AuthorAddress":null
+  },
+  {
+    "name":"Book3",
+    "price":6.66,
+    "book1AuthorAddress":null
+  }
+]

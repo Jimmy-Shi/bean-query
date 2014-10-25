@@ -1,0 +1,155 @@
+[
+  {
+    "price":50.55,
+    "name":"Book1",
+    "mainAuthor":{
+      "name":"Book1-MainAuthor",
+      "address":{
+        "address":"Shenzhen Guangdong China",
+        "postCode":"518000"
+      },
+      "birthDate":"1982-01-30T14:52:39"
+    },
+    "authorList":[
+      {
+        "name":"Book1-Author-1",
+        "address":{
+          "address":"Shenzhen Guangdong China",
+          "postCode":"518001"
+        },
+        "birthDate":"1982-01-30T14:52:39"
+      },
+      {
+        "name":"Book1-Author-2",
+        "address":{
+          "address":"Shenzhen Guangdong China",
+          "postCode":"518002"
+        },
+        "birthDate":"1983-01-29T14:52:39"
+      }
+
+    ],
+    "authorMap":{
+      "Book1-Author-2":{
+        "name":"Book1-Author-2",
+        "address":{
+          "address":"Shenzhen Guangdong China",
+          "postCode":"518003"
+        },
+        "birthDate":"1983-01-29T14:52:39"
+      },
+      "Book1-Author-1":{
+        "name":"Book1-Author-1",
+        "address":{
+          "address":"Shenzhen Guangdong China",
+          "postCode":"518004"
+        },
+        "birthDate":"1982-01-30T14:52:39"
+      }
+
+    }
+
+  },
+  {
+    "name":"Book2",
+    "price":6.66,
+    "mainAuthor":{
+      "name":"Book2-MainAuthor",
+      "address":{
+        "address":"Shenzhen Guangdong China",
+        "postCode":"518005"
+      },
+      "birthDate":"1982-01-30T14:52:39"
+    },
+    "authorList":[
+      {
+        "name":"Book2-Author-1",
+        "address":{
+          "address":"Shenzhen Guangdong China",
+          "postCode":"518006"
+        },
+        "birthDate":"1982-01-30T14:52:39"
+      },
+      {
+        "name":"Book2-Author-2",
+        "address":{
+          "address":"Shenzhen Guangdong China",
+          "postCode":"518007"
+        },
+        "birthDate":"1983-01-29T14:52:39"
+      }
+
+    ],
+    "authorMap":{
+      "Book2-Author-2":{
+        "name":"Book2-Author-2",
+        "address":{
+          "address":"Shenzhen Guangdong China",
+          "postCode":"518008"
+        },
+        "birthDate":"1983-01-29T14:52:39"
+      },
+      "Book2-Author-1":{
+        "name":"Book2-Author-1",
+        "address":{
+          "address":"Shenzhen Guangdong China",
+          "postCode":"518010"
+        },
+        "birthDate":"1982-01-30T14:52:39"
+      }
+
+    }
+
+  },
+  {
+    "name":"Book3",
+    "price":6.66,
+    "mainAuthor":{
+      "name":"Book3-MainAuthor",
+      "address":{
+        "address":"Shenzhen Guangdong China",
+        "postCode":"518005"
+      },
+      "birthDate":"1982-01-30T14:52:39"
+    },
+    "authorList":[
+      {
+        "name":"Book3-Author-1",
+        "address":{
+          "address":"Shenzhen Guangdong China",
+          "postCode":"518006"
+        },
+        "birthDate":"1982-01-30T14:52:39"
+      },
+      {
+        "name":"Book3-Author-2",
+        "address":{
+          "address":"Shenzhen Guangdong China",
+          "postCode":"518007"
+        },
+        "birthDate":"1983-01-29T14:52:39"
+      }
+
+    ],
+    "authorMap":{
+      "Book3-Author-1":{
+        "name":"Book3-Author-1",
+        "address":{
+          "address":"Shenzhen Guangdong China",
+          "postCode":"518010"
+        },
+        "birthDate":"1982-01-30T14:52:39"
+      },
+      "Book3-Author-2":{
+        "name":"Book3-Author-2",
+        "address":{
+          "address":"Shenzhen Guangdong China",
+          "postCode":"518008"
+        },
+        "birthDate":"1983-01-29T14:52:39"
+      }
+
+    }
+
+  }
+]

@@ -1,0 +1,39 @@
+[
+  {
+    "a":null,
+    "b":null,
+    "mainAuthor":{
+      "name":"Book1-MainAuthor",
+      "address":{
+        "address":"Shenzhen Guangdong China",
+        "postCode":"518000"
+      },
+      "birthDate":"1982-01-30T14:52:39"
+    }
+  },
+  {
+    "a":null,
+    "b":null,
+    "mainAuthor":{
+      "name":"Book3-MainAuthor",
+      "address":{
+        "address":"Shenzhen Guangdong China",
+        "postCode":"518005"
+      },
+      "birthDate":"1982-01-30T14:52:39"
+    }
+  }
+  ,
+  {
+    "a":null,
+    "b":null,
+    "mainAuthor":{
+      "name":"Book2-MainAuthor",
+      "address":{
+        "address":"Shenzhen Guangdong China",
+        "postCode":"518005"
+      },
+      "birthDate":"1982-01-30T14:52:39"
+    }
+  }
+]
