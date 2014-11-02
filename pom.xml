@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>cn.jimmyshi</groupId>
   <artifactId>bean-query</artifactId>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.0.1</version>
   <packaging>jar</packaging>
   <name>Bean Query</name>
   <description>Java lib to do query on a collection of java bean and returns the result as a list of Map.</description>
@@ -23,7 +23,7 @@
     <connection>scm:git:git@github.com:Jimmy-Shi/bean-query.git</connection>
     <developerConnection>scm:git:git@github.com:Jimmy-Shi/bean-query.git</developerConnection>
     <url>git@github.com:Jimmy-Shi/bean-query.git</url>
-    <tag>HEAD</tag>
+    <tag>bean-query-1.0.1</tag>
   </scm>
   <profiles>
     <profile>
