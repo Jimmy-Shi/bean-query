@@ -7,8 +7,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.beanutils.BeanComparator;
-import org.apache.commons.collections.comparators.ReverseComparator;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.Predicate;
 import org.apache.commons.collections4.functors.TruePredicate;
@@ -48,7 +46,7 @@ public final class BeanQuery extends BeanQueryCustomizedMatchers {
   private final Selector selector;
   private Collection from;
   private Predicate predicate = TruePredicate.truePredicate();
-  private BeanComparator beanComparator;
+  private PropertyComparator propertyComparator;
   private boolean descSorting = false;
 
   private BeanQuery(Selector selector) {
@@ -94,7 +92,7 @@ public final class BeanQuery extends BeanQueryCustomizedMatchers {
    * @param orderByProperty
    */
   public BeanQuery orderBy(String orderByProperty) {
-    this.beanComparator = new BeanComparator(orderByProperty);
+    this.propertyComparator = new PropertyComparator(orderByProperty);
     return this;
   }
 
@@ -136,10 +134,10 @@ public final class BeanQuery extends BeanQueryCustomizedMatchers {
     CollectionUtils.filter(copied, this.predicate);
     logger.info("Done filtering collection, filtered result size is [{}]", copied.size());
 
-    if (null != this.beanComparator) {
-      logger.info("Start to sort the filtered collection by property [{}] in [{}] order", beanComparator.getProperty(),
-          this.descSorting ? "DESC" : "ASC");
-      Comparator comparator = this.descSorting ? new ReverseComparator(beanComparator) : beanComparator;
+    if (null != this.propertyComparator) {
+      logger.info("Start to sort the filtered collection by property [{}] in [{}] order",
+          propertyComparator.getPropertyName(), this.descSorting ? "DESC" : "ASC");
+      Comparator comparator = this.descSorting ? propertyComparator.desc() : propertyComparator.asc();
       Collections.sort(copied, comparator);
       logger.info("Done sorting the filtered collection.");
     }

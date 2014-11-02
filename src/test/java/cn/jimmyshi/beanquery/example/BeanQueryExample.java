@@ -82,6 +82,25 @@ public class BeanQueryExample {
   }
 
   @Test
+  public void shouldIncludeNullValueWhenSortingDesc(){
+    List<Map<String,Object>> result=select("name").from(dataLoader.loadSourceData("forOrdersWithNullValue.json")).orderBy("name").desc().execute();
+    dataLoader.assertDataToJsonEqualsExpectedFileContent("shouldIncludeNullValueWhenSortingDesc.json", result);
+  }
+
+  @Test
+  public void shouldIncludeNullValueWhenSortingAsc(){
+    List<Map<String,Object>> result=select("name").from(dataLoader.loadSourceData("forOrdersWithNullValue.json")).orderBy("name").asc().execute();
+    dataLoader.assertDataToJsonEqualsExpectedFileContent("shouldIncludeNullValueWhenSortingAsc.json", result);
+  }
+
+  @Test
+  public void testSortingWithNotExistProperty(){
+    List<Map<String, Object>> result = select("name,price,mainAuthor")
+        .from(dataLoader.loadSourceData("forOrders.json")).orderBy("notExistingProperty").execute();
+    dataLoader.assertDataToJsonEqualsExpectedFileContent("shouldNotChangeOrder.json", result);
+  }
+
+  @Test
   public void shouldInPriceDescOrder() {
     List<Map<String, Object>> result = select("name,price,mainAuthor")
         .from(dataLoader.loadSourceData("forOrders.json")).orderBy("price").desc().execute();
