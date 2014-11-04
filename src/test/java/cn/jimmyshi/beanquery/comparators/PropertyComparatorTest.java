@@ -1,4 +1,4 @@
-package cn.jimmyshi.beanquery;
+package cn.jimmyshi.beanquery.comparators;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
@@ -8,6 +8,8 @@ import java.util.Comparator;
 
 import org.junit.Test;
 import org.mockito.Mockito;
+
+import cn.jimmyshi.beanquery.comparators.PropertyComparator;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class PropertyComparatorTest {
@@ -94,14 +96,6 @@ public class PropertyComparatorTest {
     assertEquals(0, p.compare(new TestComparingClass(1), new TestComparingClass(1)));
     assertEquals(1, p.compare(new TestComparingClass(2), new TestComparingClass(1)));
     assertEquals(-1, p.compare(new TestComparingClass(2), new TestComparingClass(3)));
-  }
-
-  @Test
-  public void shouldGetOppositeResultWhenDesc() {
-    Comparator p = new PropertyComparator("intValue").desc();
-    assertEquals(0, p.compare(new TestComparingClass(1), new TestComparingClass(1)));
-    assertEquals(-1, p.compare(new TestComparingClass(2), new TestComparingClass(1)));
-    assertEquals(1, p.compare(new TestComparingClass(2), new TestComparingClass(3)));
   }
 
   @Test

@@ -14,6 +14,10 @@ import org.hamcrest.Matcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cn.jimmyshi.beanquery.comparators.ComparableObjectComparator;
+import cn.jimmyshi.beanquery.comparators.DelegatedSortOrderableComparator;
+import cn.jimmyshi.beanquery.comparators.PropertyComparator;
+import cn.jimmyshi.beanquery.comparators.SortOrderableComparator;
 import cn.jimmyshi.beanquery.selectors.ClassSelector;
 import cn.jimmyshi.beanquery.selectors.CompositeSelector;
 import cn.jimmyshi.beanquery.selectors.PropertySelector;
@@ -46,7 +50,7 @@ public final class BeanQuery extends BeanQueryCustomizedMatchers {
   private final Selector selector;
   private Collection from;
   private Predicate predicate = TruePredicate.truePredicate();
-  private PropertyComparator propertyComparator;
+  private SortOrderableComparator comparator;
   private boolean descSorting = false;
 
   private BeanQuery(Selector selector) {
@@ -54,7 +58,7 @@ public final class BeanQuery extends BeanQueryCustomizedMatchers {
   }
 
   /**
-   * Specify where to query from
+   * Specify where to query from.
    *
    * @param from
    */
@@ -85,14 +89,36 @@ public final class BeanQuery extends BeanQueryCustomizedMatchers {
 
   /**
    * Specify the property of the Beans to be compared when ordering the result.
-   * If this method is not called before calling the execute() method, the
-   * result will be the same order as they are input.<br/>
-   * The default Order is ASC order.
+   * When comparing, the property value of the bean must be instance of
+   * {@link Comparable}, Otherwise it will be treated as a null value. The null
+   * value is sorted at the top in ASC sorting and at the bottom in DESC
+   * sorting. The default Order is ASC order.
    *
    * @param orderByProperty
    */
   public BeanQuery orderBy(String orderByProperty) {
-    this.propertyComparator = new PropertyComparator(orderByProperty);
+    this.comparator = new DelegatedSortOrderableComparator(new PropertyComparator(orderByProperty,
+        new ComparableObjectComparator()));
+    return this;
+  }
+
+  /**
+   * Specify the property of the beans to be compared by the
+   * propertyValueComparator when sorting the result. If there is not a
+   * accessible public read method of the property, the value of the property
+   * passed to the propertyValueComparator will be null.
+   */
+  public BeanQuery orderBy(String orderByProperty, Comparator propertyValueComparator) {
+    this.comparator = new DelegatedSortOrderableComparator(new PropertyComparator(orderByProperty,
+        propertyValueComparator));
+    return this;
+  }
+
+  /**
+   * Specify the comparator used to compare the bean when sorting the result.
+   */
+  public BeanQuery orderBy(Comparator beanComparator) {
+    this.comparator = new DelegatedSortOrderableComparator(beanComparator);
     return this;
   }
 
@@ -134,11 +160,10 @@ public final class BeanQuery extends BeanQueryCustomizedMatchers {
     CollectionUtils.filter(copied, this.predicate);
     logger.info("Done filtering collection, filtered result size is [{}]", copied.size());
 
-    if (null != this.propertyComparator) {
-      logger.info("Start to sort the filtered collection by property [{}] in [{}] order",
-          propertyComparator.getPropertyName(), this.descSorting ? "DESC" : "ASC");
-      Comparator comparator = this.descSorting ? propertyComparator.desc() : propertyComparator.asc();
-      Collections.sort(copied, comparator);
+    if (null != this.comparator) {
+      Comparator actualComparator = this.descSorting ? comparator.desc() : comparator.asc();
+      logger.info("Start to sort the filtered collection with comparator [{}]", actualComparator);
+      Collections.sort(copied, actualComparator);
       logger.info("Done sorting the filtered collection.");
     }
 

@@ -3,6 +3,7 @@ package cn.jimmyshi.beanquery.example;
 import static cn.jimmyshi.beanquery.BeanQuery.*;
 import static org.junit.Assert.assertThat;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import org.junit.Before;
@@ -104,6 +105,35 @@ public class BeanQueryExample {
   public void shouldInPriceDescOrder() {
     List<Map<String, Object>> result = select("name,price,mainAuthor")
         .from(dataLoader.loadSourceData("forOrders.json")).orderBy("price").desc().execute();
+    dataLoader.assertDataToJsonEqualsExpectedFileContent("shouldInPriceDescOrder.json", result);
+  }
+
+  @Test
+  public void testOrderByBeanComparator(){
+    Comparator<Book> priceBeanComparator = new Comparator<Book>() {
+      @Override
+      public int compare(Book o1, Book o2) {
+        return Double.compare(o1.getPrice(), o2.getPrice());
+      }
+    };
+
+    List<Map<String, Object>> result = select("name,price,mainAuthor")
+        .from(dataLoader.loadSourceData("forOrders.json")).orderBy(priceBeanComparator).desc().execute();
+    dataLoader.assertDataToJsonEqualsExpectedFileContent("shouldInPriceDescOrder.json", result);
+  }
+
+  @Test
+  public void testOrderByProvidedPropertyComparator(){
+    Comparator<Double> doubleComparator=new Comparator<Double>() {
+
+      @Override
+      public int compare(Double o1, Double o2) {
+        return o1.compareTo(o2);
+      }
+    };
+
+    List<Map<String, Object>> result = select("name,price,mainAuthor")
+        .from(dataLoader.loadSourceData("forOrders.json")).orderBy("price",doubleComparator).desc().execute();
     dataLoader.assertDataToJsonEqualsExpectedFileContent("shouldInPriceDescOrder.json", result);
   }
 
