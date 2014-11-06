@@ -6,7 +6,7 @@ import org.apache.commons.collections4.map.SingletonMap;
 
 import cn.jimmyshi.beanquery.DefaultNullValuePropertyValueGetter;
 
-public class PropertySelector extends DefaultSelector {
+public class PropertySelector extends DefaultKeyValueMapSelector {
   private String property;
   private String alias;
 

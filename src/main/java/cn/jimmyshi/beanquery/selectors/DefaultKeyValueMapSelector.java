@@ -9,9 +9,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import cn.jimmyshi.beanquery.Selector;
-
-public abstract class DefaultSelector implements Selector {
+public abstract class DefaultKeyValueMapSelector implements KeyValueMapSelector {
 
   @Override
   public List<Map<String, Object>> select(List<?> from) {

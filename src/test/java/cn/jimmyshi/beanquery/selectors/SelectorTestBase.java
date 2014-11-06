@@ -6,7 +6,6 @@ import static org.junit.Assert.assertThat;
 
 import java.util.Map;
 
-import cn.jimmyshi.beanquery.Selector;
 import cn.jimmyshi.beanquery.example.Book;
 
 /**
@@ -14,11 +13,11 @@ import cn.jimmyshi.beanquery.example.Book;
  *
  */
 public class SelectorTestBase {
-  void assertSelectResultKeySizeIsZero(Selector selector) {
+  void assertSelectResultKeySizeIsZero(KeyValueMapSelector selector) {
     Map<String, Object> result = selector.select(new Book());
     assertThat(result.keySet(), empty());
   }
-  void assertSelectResultKeys(Selector selector,String... keys){
+  void assertSelectResultKeys(KeyValueMapSelector selector,String... keys){
     Map<String, Object> result = selector.select(new Book());
     assertThat(result.keySet(), contains(keys));
   }

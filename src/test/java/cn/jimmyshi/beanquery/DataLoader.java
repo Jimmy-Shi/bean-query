@@ -41,8 +41,7 @@ public class DataLoader {
       Object dataValueAsListOfMap = mapper.readValue(mapper.writer().writeValueAsString(data), List.class);
       Assert.assertEquals(fileContentAsListOfMap, dataValueAsListOfMap);
     } catch (Exception ex) {
-      ex.printStackTrace();
-      throw new RuntimeException(String.format("Exception while comparing file [%s] with object [%s]", fullFileName,
+      throw new IllegalStateException(String.format("Exception while comparing file [%s] with object [%s]", fullFileName,
           data), ex);
     }
   }

@@ -38,6 +38,19 @@ public class BeanQueryExample {
   }
 
   @Test
+  public void shouldBooksShortedByNameDesc(){
+    List<Book> sortedBooks = selectBean(Book.class).from(mainData).orderBy("name").desc().execute();
+    dataLoader.assertDataToJsonEqualsExpectedFileContent("shouldBooksShortedByName.json", sortedBooks);
+  }
+
+  @Test
+  public void shouldOnlyBook1InResult(){
+    List<Book> result=selectBean(Book.class).from(mainData).where(value("name", is("Book1"))).execute();
+    assertThat(result,hasSize(1));
+    assertThat(result.get(0).getName(),is("Book1"));
+  }
+
+  @Test
   public void shouldReturnFieldsOnly() {
     List<Map<String, Object>> result = select("name,price,price as p, mainAuthor").from(mainData).execute();
     dataLoader.assertDataToJsonEqualsExpectedFileContent("shouldReturnFieldsOnly.json", result);

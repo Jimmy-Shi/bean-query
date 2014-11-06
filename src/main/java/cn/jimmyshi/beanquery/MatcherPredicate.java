@@ -3,8 +3,7 @@ package cn.jimmyshi.beanquery;
 import org.apache.commons.collections4.Predicate;
 import org.hamcrest.Matcher;
 
-@SuppressWarnings("rawtypes")
-public class MatcherPredicate implements Predicate {
+public class MatcherPredicate<T> implements Predicate<T> {
   private final Matcher<?> matcher;
 
   public MatcherPredicate(Matcher<?> matcher) {

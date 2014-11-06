@@ -18,8 +18,10 @@ import cn.jimmyshi.beanquery.comparators.ComparableObjectComparator;
 import cn.jimmyshi.beanquery.comparators.DelegatedSortOrderableComparator;
 import cn.jimmyshi.beanquery.comparators.PropertyComparator;
 import cn.jimmyshi.beanquery.comparators.SortOrderableComparator;
+import cn.jimmyshi.beanquery.selectors.BeanSelector;
 import cn.jimmyshi.beanquery.selectors.ClassSelector;
 import cn.jimmyshi.beanquery.selectors.CompositeSelector;
+import cn.jimmyshi.beanquery.selectors.KeyValueMapSelector;
 import cn.jimmyshi.beanquery.selectors.PropertySelector;
 import cn.jimmyshi.beanquery.selectors.StringSelector;
 
@@ -45,15 +47,15 @@ import cn.jimmyshi.beanquery.selectors.StringSelector;
  * </code>
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
-public final class BeanQuery extends BeanQueryCustomizedMatchers {
+public final class BeanQuery<T> extends BeanQueryCustomizedMatchers {
   private static final Logger logger = LoggerFactory.getLogger(BeanQuery.class);
-  private final Selector selector;
+  private final Selector<T> selector;
   private Collection from;
   private Predicate predicate = TruePredicate.truePredicate();
   private SortOrderableComparator comparator;
   private boolean descSorting = false;
 
-  private BeanQuery(Selector selector) {
+  private BeanQuery(Selector<T> selector) {
     this.selector = selector;
   }
 
@@ -62,7 +64,7 @@ public final class BeanQuery extends BeanQueryCustomizedMatchers {
    *
    * @param from
    */
-  public BeanQuery from(Collection<?> from) {
+  public BeanQuery<T> from(Collection<?> from) {
     this.from = from;
     return this;
   }
@@ -73,7 +75,7 @@ public final class BeanQuery extends BeanQueryCustomizedMatchers {
    *
    * @param matcher
    */
-  public BeanQuery where(Matcher matcher) {
+  public BeanQuery<T> where(Matcher matcher) {
     this.predicate = new MatcherPredicate(matcher);
     return this;
   }
@@ -82,7 +84,7 @@ public final class BeanQuery extends BeanQueryCustomizedMatchers {
    * Support multiple Hamcrest Matchers as the query condition. Only items match
    * all the matchers will be chosen.
    */
-  public BeanQuery where(Matcher... matchers) {
+  public BeanQuery<T> where(Matcher... matchers) {
     this.predicate = new MatcherPredicate(allOf(matchers));
     return this;
   }
@@ -96,7 +98,7 @@ public final class BeanQuery extends BeanQueryCustomizedMatchers {
    *
    * @param orderByProperty
    */
-  public BeanQuery orderBy(String orderByProperty) {
+  public BeanQuery<T> orderBy(String orderByProperty) {
     this.comparator = new DelegatedSortOrderableComparator(new PropertyComparator(orderByProperty,
         new ComparableObjectComparator()));
     return this;
@@ -108,7 +110,7 @@ public final class BeanQuery extends BeanQueryCustomizedMatchers {
    * accessible public read method of the property, the value of the property
    * passed to the propertyValueComparator will be null.
    */
-  public BeanQuery orderBy(String orderByProperty, Comparator propertyValueComparator) {
+  public BeanQuery<T> orderBy(String orderByProperty, Comparator propertyValueComparator) {
     this.comparator = new DelegatedSortOrderableComparator(new PropertyComparator(orderByProperty,
         propertyValueComparator));
     return this;
@@ -117,7 +119,7 @@ public final class BeanQuery extends BeanQueryCustomizedMatchers {
   /**
    * Specify the comparator used to compare the bean when sorting the result.
    */
-  public BeanQuery orderBy(Comparator beanComparator) {
+  public BeanQuery<T> orderBy(Comparator beanComparator) {
     this.comparator = new DelegatedSortOrderableComparator(beanComparator);
     return this;
   }
@@ -127,7 +129,7 @@ public final class BeanQuery extends BeanQueryCustomizedMatchers {
    * {@link #orderBy(String)} is not specified, calling this method does not
    * affect anything.
    */
-  public BeanQuery desc() {
+  public BeanQuery<T> desc() {
     this.descSorting = true;
     return this;
   }
@@ -137,7 +139,7 @@ public final class BeanQuery extends BeanQueryCustomizedMatchers {
    * {@link #orderBy(String)} is not specified, calling this method does not
    * affect anything.
    */
-  public BeanQuery asc() {
+  public BeanQuery<T> asc() {
     this.descSorting = false;
     return this;
   }
@@ -148,7 +150,7 @@ public final class BeanQuery extends BeanQueryCustomizedMatchers {
    *
    * @return
    */
-  public List<Map<String, Object>> execute() {
+  public List<T> execute() {
     if (CollectionUtils.isEmpty(from)) {
       logger.info("Querying from an empty collection, returning empty list.");
       return Collections.emptyList();
@@ -168,7 +170,7 @@ public final class BeanQuery extends BeanQueryCustomizedMatchers {
     }
 
     logger.info("Start to slect from filtered collection with selector [{}].", selector);
-    List<Map<String, Object>> select = this.selector.select(copied);
+    List<T> select = this.selector.select(copied);
     logger.info("Done select from filtered collection.");
     return select;
 
@@ -179,8 +181,8 @@ public final class BeanQuery extends BeanQueryCustomizedMatchers {
    *
    * @param selectors
    */
-  public static BeanQuery select(Selector... selectors) {
-    return new BeanQuery(new CompositeSelector(selectors));
+  public static BeanQuery<Map<String, Object>> select(KeyValueMapSelector... selectors) {
+    return new BeanQuery<Map<String, Object>>(new CompositeSelector(selectors));
   }
 
   /**
@@ -190,8 +192,8 @@ public final class BeanQuery extends BeanQueryCustomizedMatchers {
    * </br>When executing the BeanQuery instance created in above code will
    * return a list of map with 3 keys:[name,p,address].
    */
-  public static BeanQuery select(String selectString) {
-    return new BeanQuery(new StringSelector(selectString));
+  public static BeanQuery<Map<String, Object>> select(String selectString) {
+    return new BeanQuery<Map<String, Object>>(new StringSelector(selectString));
   }
 
   /**
@@ -202,8 +204,25 @@ public final class BeanQuery extends BeanQueryCustomizedMatchers {
    * When executing the BeanQuery instance created in above code will return a
    * list of map with 3 keys:[name,p,address].
    */
-  public static BeanQuery select(String... propertyStrings) {
-    return new BeanQuery(new StringSelector(propertyStrings));
+  public static BeanQuery<Map<String, Object>> select(String... propertyStrings) {
+    return new BeanQuery<Map<String, Object>>(new StringSelector(propertyStrings));
+  }
+
+  /**
+   * Create a BeanQuery instance without the function of convert result into Map
+   * function. If you just want to filter bean collection, sort bean collection
+   * and want to get the execute result as a list of beans, you should use this
+   * method to create a BeanQuery instance.
+   */
+  public static <T> BeanQuery<T> selectBean(Class<T> beanClass) {
+    return new BeanQuery<T>(new BeanSelector<T>(beanClass));
+  }
+
+  /**
+   * Allow client to create a BeanQuery instance with a customized selector.
+   */
+  public static <T> BeanQuery<T> select(Selector<T> selector){
+    return new BeanQuery(selector);
   }
 
   /**

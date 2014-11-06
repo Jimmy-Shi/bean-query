@@ -14,28 +14,26 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cn.jimmyshi.beanquery.Selector;
-
-public class CompositeSelector extends DefaultSelector implements Selector {
+public class CompositeSelector extends DefaultKeyValueMapSelector{
   private static final Logger logger = LoggerFactory.getLogger(CompositeSelector.class);
-  private static final List<Selector> SINGLETON_NULL_LIST = Collections.singletonList(null);
-  private final List<Selector> selectors;
+  private static final List<KeyValueMapSelector> SINGLETON_NULL_LIST = Collections.singletonList(null);
+  private final List<KeyValueMapSelector> selectors;
 
-  public CompositeSelector(Selector... selectors) {
+  public CompositeSelector(KeyValueMapSelector... selectors) {
     if (ArrayUtils.isEmpty(selectors)) {
-      this.selectors = new LinkedList<Selector>();
+      this.selectors = new LinkedList<KeyValueMapSelector>();
     } else {
-      this.selectors = new LinkedList<Selector>(Arrays.asList(selectors));
+      this.selectors = new LinkedList<KeyValueMapSelector>(Arrays.asList(selectors));
       removeNullSubSelectors();
     }
   }
 
   CompositeSelector() {
-    this.selectors = new LinkedList<Selector>();
+    this.selectors = new LinkedList<KeyValueMapSelector>();
   }
 
-  CompositeSelector(List<? extends Selector> selectors) {
-    this.selectors = new ArrayList<Selector>(ListUtils.emptyIfNull(selectors));
+  CompositeSelector(List<? extends KeyValueMapSelector> selectors) {
+    this.selectors = new ArrayList<KeyValueMapSelector>(ListUtils.emptyIfNull(selectors));
     removeNullSubSelectors();
   }
 
@@ -43,7 +41,7 @@ public class CompositeSelector extends DefaultSelector implements Selector {
     this.selectors.removeAll(SINGLETON_NULL_LIST);
   }
 
-  CompositeSelector addSubSelector(Selector subSelector) {
+  CompositeSelector addSubSelector(KeyValueMapSelector subSelector) {
     if (null != subSelector) {
       this.selectors.add(subSelector);
     }
@@ -58,7 +56,7 @@ public class CompositeSelector extends DefaultSelector implements Selector {
     }
 
     Map<String, Object> result = new LinkedHashMap<String, Object>();
-    for (Selector selector : selectors) {
+    for (KeyValueMapSelector selector : selectors) {
       result.putAll(selector.select(item));
     }
     return result;

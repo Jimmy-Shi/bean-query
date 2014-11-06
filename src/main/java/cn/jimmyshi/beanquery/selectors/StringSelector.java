@@ -7,12 +7,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cn.jimmyshi.beanquery.Selector;
-
 /**
  * Selector to support create property selector via String parameter.
  */
-public class StringSelector extends DefaultSelector implements Selector {
+public class StringSelector extends DefaultKeyValueMapSelector {
   private static final Logger logger = LoggerFactory.getLogger(StringSelector.class);
   private CompositeSelector compositeSelector = new CompositeSelector();
 

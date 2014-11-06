@@ -9,14 +9,12 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import cn.jimmyshi.beanquery.Selector;
-
-public class DefaultSelectorTest {
+public class DefaultKeyValueMapSelectorTest {
 
   @Test
   public void testSelectoFromNullList() {
     //given
-    Selector selector=new DefaultSelector() {
+    KeyValueMapSelector selector=new DefaultKeyValueMapSelector() {
       @Override
       protected Map<String, Object> doSelect(Object item) {
         return Collections.emptyMap();
@@ -31,7 +29,7 @@ public class DefaultSelectorTest {
   @Test
   public void testSelectFromEmptyList(){
   //given
-    Selector selector=new DefaultSelector() {
+    KeyValueMapSelector selector=new DefaultKeyValueMapSelector() {
       @Override
       protected Map<String, Object> doSelect(Object item) {
         return Collections.emptyMap();

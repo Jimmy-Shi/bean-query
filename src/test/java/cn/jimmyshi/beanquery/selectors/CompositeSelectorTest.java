@@ -12,21 +12,20 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import cn.jimmyshi.beanquery.Selector;
 import cn.jimmyshi.beanquery.example.Book;
 
 public class CompositeSelectorTest extends SelectorTestBase{
 
   @Test
   public void testConstructWithNull(){
-    Selector subSelector=null;
+    KeyValueMapSelector subSelector=null;
     CompositeSelector selector=new CompositeSelector(subSelector);
     assertSelectResultKeySizeIsZero(selector);
   }
 
   @Test
   public void testConstructWithNullArray(){
-    CompositeSelector selector=new CompositeSelector((Selector[])null);
+    CompositeSelector selector=new CompositeSelector((KeyValueMapSelector[])null);
     assertSelectResultKeySizeIsZero(selector);
   }
 
@@ -46,14 +45,14 @@ public class CompositeSelectorTest extends SelectorTestBase{
 
   @Test
   public void testConstructWithNullList(){
-    List<Selector> subSelectors=null;
+    List<KeyValueMapSelector> subSelectors=null;
     CompositeSelector selector=new CompositeSelector(subSelectors);
     assertSelectResultKeySizeIsZero(selector);
   }
 
   @Test
   public void testConstructWithEmptyList(){
-    List<Selector> subSelectors=Collections.emptyList();
+    List<KeyValueMapSelector> subSelectors=Collections.emptyList();
     CompositeSelector selector=new CompositeSelector(subSelectors);
     assertSelectResultKeySizeIsZero(selector);
   }
