@@ -70,6 +70,14 @@ public final class BeanQuery<T> extends BeanQueryCustomizedMatchers {
   }
 
   /**
+   * Same as <code>from(Collections.singleton(bean))</code>
+   */
+  public BeanQuery<T> from(Object bean){
+    this.from=Collections.singleton(bean);
+    return this;
+  }
+
+  /**
    * Support the Hamcrest Matcher as the query condition. Only items match this
    * matcher will be chosen.
    *
@@ -145,6 +153,26 @@ public final class BeanQuery<T> extends BeanQueryCustomizedMatchers {
   }
 
   /**
+   * A convenient method of from(from).execute();
+   */
+  public List<T> executeFrom(Collection<?> from){
+    return from(from).execute();
+  }
+
+  /**
+   * Execute from a bean to check does it match the filtering condition and
+   * convert it.
+   */
+  public T executeFrom(Object bean) {
+    List<T> executeFromCollectionResult = executeFrom(Collections.singleton(bean));
+    if (CollectionUtils.isEmpty(executeFromCollectionResult)) {
+      return null;
+    } else {
+      return executeFromCollectionResult.get(0);
+    }
+  }
+
+  /**
    * Execute this Query. If query from a null or empty collection, an empty list
    * will be returned.
    *
@@ -162,7 +190,7 @@ public final class BeanQuery<T> extends BeanQueryCustomizedMatchers {
     CollectionUtils.filter(copied, this.predicate);
     logger.info("Done filtering collection, filtered result size is [{}]", copied.size());
 
-    if (null != this.comparator) {
+    if (null != this.comparator && copied.size()>1) {
       Comparator actualComparator = this.descSorting ? comparator.desc() : comparator.asc();
       logger.info("Start to sort the filtered collection with comparator [{}]", actualComparator);
       Collections.sort(copied, actualComparator);

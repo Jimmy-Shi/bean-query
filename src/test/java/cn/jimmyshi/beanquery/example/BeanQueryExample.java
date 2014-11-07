@@ -44,6 +44,33 @@ public class BeanQueryExample {
   }
 
   @Test
+  public void shouldExecuteFromMethodsWorking(){
+    List<Book> sortedBooks = selectBean(Book.class).orderBy("name").desc().executeFrom(mainData);
+    dataLoader.assertDataToJsonEqualsExpectedFileContent("shouldBooksShortedByName.json", sortedBooks);
+  }
+
+  @Test
+  public void shouldExcecuteFromBeanMethodWorksWithWhereCondition(){
+    Book book=new Book();
+    book.setName("abc123");
+    Map<String,Object> result=select("name,price").where(value("name",startsWith("abc"))).executeFrom(book);
+    assertThat((String)result.get("name"),is("abc123"));
+  }
+
+  @Test
+  public void shouldExecuteFromBeanMethodWorking(){
+    Map<String,Object> executeFromResult=select("name,price").where(notNullValue()).executeFrom(new Object());
+    assertThat(executeFromResult.keySet(),hasSize(2));
+    assertThat(executeFromResult.keySet(),containsInAnyOrder("name","price"));
+  }
+
+  @Test
+  public void shouldExecuteFromBeanMethodGetNullWhenNotFilteredResult(){
+    Map<String,Object> executeFromResult=select("name,price").where(startsWith("abc")).executeFrom(new Object());
+    assertThat(executeFromResult, nullValue());
+  }
+
+  @Test
   public void shouldOnlyBook1InResult(){
     List<Book> result=selectBean(Book.class).from(mainData).where(value("name", is("Book1"))).execute();
     assertThat(result,hasSize(1));
@@ -53,6 +80,12 @@ public class BeanQueryExample {
   @Test
   public void shouldReturnFieldsOnly() {
     List<Map<String, Object>> result = select("name,price,price as p, mainAuthor").from(mainData).execute();
+    dataLoader.assertDataToJsonEqualsExpectedFileContent("shouldReturnFieldsOnly.json", result);
+  }
+
+  @Test
+  public void shouldWorkWithMixedSelectors(){
+    List<Map<String, Object>> result = select(allOf(Book.class).except("authorList","authorMap","mainAuthor"),property("price").as("p"),property("mainAuthor")).from(mainData).execute();
     dataLoader.assertDataToJsonEqualsExpectedFileContent("shouldReturnFieldsOnly.json", result);
   }
 
