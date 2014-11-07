@@ -6,7 +6,7 @@ import org.apache.commons.collections4.map.SingletonMap;
 
 import cn.jimmyshi.beanquery.DefaultNullValuePropertyValueGetter;
 
-public class PropertySelector extends DefaultKeyValueMapSelector {
+public class PropertySelector extends KeyValueMapSelector {
   private String property;
   private String alias;
 
@@ -14,6 +14,10 @@ public class PropertySelector extends DefaultKeyValueMapSelector {
     return property;
   }
 
+  /**
+   * @param property name of the property name used to fetch value from the bean.
+   * @param alias the key in the result map
+   */
   public PropertySelector(String property, String alias) {
     this.property = property;
     this.alias = alias;

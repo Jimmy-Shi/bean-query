@@ -10,14 +10,19 @@ public class ComparableObjectComparator implements Comparator {
   private static final Logger logger = LoggerFactory.getLogger(ComparableObjectComparator.class);
 
   /**
-   * <ul>
+   * <ol>
    * <li>First convert the input objects to comparable instances(comparable1,
-   * comparable2). If they are null or not instance of comparable, the convert
-   * result will be null.</li>
-   * <li>If both both comparable instances are null, return 0.</li>
+   * comparable2). If they are null or not instance of comparable, the converted
+   * result is null.
+   * <ul>
+   * <li>If both converted result are null, return 0.</li>
    * <li>If comparable1 is null and comparable2 is not null, return -1</li>
    * <li>If comparable1 is not null and comparable2 is null, return 1</li>
-   * <li>Then call the compareTo method of the first converted
+   * </ul>
+   * </li>
+   * <li>Then <code>return comparable1.compareTo(comparable2)</code></li>
+   * <li>If there is an exception in the above step, return 0 as the result</li>
+   * </ol>
    */
   @SuppressWarnings("unchecked")
   @Override

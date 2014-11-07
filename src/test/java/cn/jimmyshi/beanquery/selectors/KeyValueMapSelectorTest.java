@@ -9,12 +9,12 @@ import java.util.Map;
 
 import org.junit.Test;
 
-public class DefaultKeyValueMapSelectorTest {
+public class KeyValueMapSelectorTest {
 
   @Test
   public void testSelectoFromNullList() {
     //given
-    KeyValueMapSelector selector=new DefaultKeyValueMapSelector() {
+    KeyValueMapSelector selector=new KeyValueMapSelector() {
       @Override
       protected Map<String, Object> doSelect(Object item) {
         return Collections.emptyMap();
@@ -29,7 +29,7 @@ public class DefaultKeyValueMapSelectorTest {
   @Test
   public void testSelectFromEmptyList(){
   //given
-    KeyValueMapSelector selector=new DefaultKeyValueMapSelector() {
+    KeyValueMapSelector selector=new KeyValueMapSelector() {
       @Override
       protected Map<String, Object> doSelect(Object item) {
         return Collections.emptyMap();

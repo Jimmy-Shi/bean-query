@@ -9,12 +9,12 @@ import java.util.List;
 public interface Selector<T> {
 
   /**
-   * Select a list of Maps from the list of java bean.
+   * Select a list from the list of java bean.
    */
   List<T> select(List<?> from);
 
   /**
-   * Select a map from the java bean.
+   * select from the java bean.
    */
   T select(Object item);
 

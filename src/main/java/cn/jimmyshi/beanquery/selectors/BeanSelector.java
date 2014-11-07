@@ -10,6 +10,11 @@ import org.slf4j.LoggerFactory;
 
 import cn.jimmyshi.beanquery.Selector;
 
+/**
+ * Selector that cast the item to the type used to construct the BeanSelector
+ * instance.
+ *
+ */
 public class BeanSelector<T> implements Selector<T> {
   private final static Logger logger = LoggerFactory.getLogger(BeanSelector.class);
   private Class<T> itemClass;
@@ -18,6 +23,10 @@ public class BeanSelector<T> implements Selector<T> {
     this.itemClass = itemClass;
   }
 
+  /**
+   * Convert each input item calling the selector method. For empty or null
+   * input, returns an empty list.
+   */
   @Override
   public List<T> select(List<?> from) {
     if (CollectionUtils.isEmpty(from)) {
@@ -32,6 +41,11 @@ public class BeanSelector<T> implements Selector<T> {
     }
   }
 
+  /**
+   * If the item is null, return null. If the item is instance of the
+   * constructor parameter itemClass, return the type cast result, otherwise,
+   * return null.
+   */
   @Override
   public T select(Object item) {
     if (item == null) {
