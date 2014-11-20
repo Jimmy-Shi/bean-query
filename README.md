@@ -3,7 +3,15 @@ Bean-query
 
 [Click Here](./README_en.md) for English version.
 
-BeanQuery 是一个把对象转换为Map的Java工具库。支持选择Bean中的一些属性，对结果进行排序和按照条件查询。不仅仅可以作用于顶层对象，也可以作用于子对象。
+Bean Query 复用[Apache Commons BeanUtils](http://commons.apache.org/proper/commons-beanutils/), [Apache Commons Collections](http://commons.apache.org/proper/commons-collections/), [Java Hamcrest](http://hamcrest.org/JavaHamcrest/) 
+来简化对Bean(集合)的排序,过滤和转换。
+
+# 文档
+
+* 阅读 [使用说明](./docs/user_guide_cn.md)来学习怎么使用
+* [BeanQueryExample.java](./src/test/java/cn/jimmyshi/beanquery/example/BeanQueryExample.java)用Junit测试用例的方式展示用法。
+
+# 快速入门
 
 BeanQuery的使用非常简单也很直接，例子代码如下：
 ```java
@@ -15,128 +23,23 @@ import static cn.jimmyshi.beanquery.BeanQuery.*;
 List<Map<String, Object>> result = select("price,name,mainAuthor.name as mainAuthorName")
     .from(bookCollection)
     .where(
-        //for books name is Book2 or starts with Book1
+        //选择name属性值是"Book2"或者以“Book1”开头
         anyOf(
             value("name", startsWith("Book1")),
             value("name", is("Book2"))
         ),
-        //for books price between (53,65)
+        //并且prince的值位于区间(53,65)
         allOf(
             value("price", greaterThan(53d)),
             value("price",lessThan(65d))
         )
     )
-    .orderBy("name").desc()
+    .orderBy("name").desc()//根据"name"属性按照倒序对结果进行排列
     .execute();
 ```
+执行完以上代码后，`result`列表中的每个Map都是`java.util.LinkedHashMap`实例，每个Map的都由下面的这三个Entry组成：
 
-在上面的例子中，bookCollection的内容如下所示(json格式)
-```json
-[
-  {
-    "price":55.55,
-    "name":"Book1",
-    "mainAuthor":{
-      "name":"Book1-MainAuthor",
-      "address":{
-        "address":"Shenzhen Guangdong China",
-        "postCode":"518000"
-      },
-      "birthDate":"1982-01-30T14:52:39"
-    }
-  },
-  {
-    "price":52.55,
-    "name":"Book12",
-    "mainAuthor":{
-      "name":"Book1-MainAuthor",
-      "address":{
-        "address":"Shenzhen Guangdong China",
-        "postCode":"518000"
-      },
-      "birthDate":"1982-01-30T14:52:39"
-    }
-  },
-  {
-    "price":53.55,
-    "name":"Book13",
-    "mainAuthor":{
-      "name":"Book13-MainAuthor",
-      "address":{
-        "address":"Shenzhen Guangdong China",
-        "postCode":"518000"
-      },
-      "birthDate":"1982-01-30T14:52:39"
-    }
-  },
-  {
-    "price":60.0,
-    "name":"Book14",
-    "mainAuthor":{
-      "name":"Book14-MainAuthor",
-      "address":{
-        "address":"Shenzhen Guangdong China",
-        "postCode":"518000"
-      },
-      "birthDate":"1982-01-30T14:52:39"
-    }
-  },
-  {
-    "price":50.55,
-    "name":"Book15",
-    "mainAuthor":{
-      "name":"Book1-MainAuthor",
-      "address":{
-        "address":"Shenzhen Guangdong China",
-        "postCode":"518000"
-      },
-      "birthDate":"1982-01-30T14:52:39"
-    }
-  },
-  {
-    "price":77.77,
-    "name":"Book3",
-    "mainAuthor":{
-      "name":"Book3-MainAuthor",
-      "address":{
-        "address":"Shenzhen Guangdong China",
-        "postCode":"518005"
-      },
-      "birthDate":"1982-01-30T14:52:39"
-    }
-  }
-  ,
-  {
-    "price":66.66,
-    "name":"Book2",
-    "mainAuthor":{
-      "name":"Book2-MainAuthor",
-      "address":{
-        "address":"Shenzhen Guangdong China",
-        "postCode":"518005"
-      },
-      "birthDate":"1982-01-30T14:52:39"
-    }
-  }
-]
-```
-执行完之后，则result的内容如下所示(json格式)
-```json
-[
-  {
-    "price":60.0,
-    "name":"Book14",
-    "mainAuthorName":"Book14-MainAuthor"
-  },
-  {
-    "price":53.55,
-    "name":"Book13",
-    "mainAuthorName":"Book13-MainAuthor"
-  },
-  {
-    "price":55.55,
-    "name":"Book1",
-    "mainAuthorName":"Book1-MainAuthor"
-  }
-]
-```
+* key=price, value=book.getPrice()
+* key=name, value=book.getName()
+* key=mainAuthorName, value=book.getMainAuthor().getName()
+

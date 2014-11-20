@@ -3,7 +3,14 @@ Bean-query
 
 [点击这里](./README.md) 查看中文版.
 
-BeanQuery is a Java lib used to transfer a collection of java bean to a list of map. You use it to query some properties of the beans, sort the result and query using conditions. Not only for the beans, it also working for the nested objects.
+Bean Query reuses [Apache Commons BeanUtils](http://commons.apache.org/proper/commons-beanutils/), [Apache Commons Collections](http://commons.apache.org/proper/commons-collections/), [Java Hamcrest](http://hamcrest.org/JavaHamcrest/) to make sorting, filtering and converting a (collection of) java bean(s) easily.
+
+# Documents
+
+* Read [User Guide](./docs/user_guide.md) to study the usage.
+* Read [BeanQueryExample.java](./src/test/java/cn/jimmyshi/beanquery/example/BeanQueryExample.java) for Junit test case based code illustration.
+
+# Quick Start
 
 Usage of BeanQuery is simple, sample code below:
 ```java
@@ -15,131 +22,23 @@ import static cn.jimmyshi.beanquery.BeanQuery.*;
 List<Map<String, Object>> result = select("price,name,mainAuthor.name as mainAuthorName")
     .from(bookCollection)
     .where(
-        //for books name is Book2 or starts with Book1
+        //select books that name is Book2 or starts with Book1
         anyOf(
             value("name", startsWith("Book1")),
             value("name", is("Book2"))
         ),
-        //for books price between (53,65)
+        //and price is between (53,65)
         allOf(
             value("price", greaterThan(53d)),
             value("price",lessThan(65d))
         )
     )
-    .orderBy("name").desc()
+    .orderBy("name").desc()//sort the result in desc direction according to the name property
     .execute();
 ```
-In this sample, the content of bookCollection as below(in json format)
-```json
-[
-  {
-    "price":55.55,
-    "name":"Book1",
-    "mainAuthor":{
-      "name":"Book1-MainAuthor",
-      "address":{
-        "address":"Shenzhen Guangdong China",
-        "postCode":"518000"
-      },
-      "birthDate":"1982-01-30T14:52:39"
-    }
-  },
-  {
-    "price":52.55,
-    "name":"Book12",
-    "mainAuthor":{
-      "name":"Book1-MainAuthor",
-      "address":{
-        "address":"Shenzhen Guangdong China",
-        "postCode":"518000"
-      },
-      "birthDate":"1982-01-30T14:52:39"
-    }
-  },
-  {
-    "price":53.55,
-    "name":"Book13",
-    "mainAuthor":{
-      "name":"Book13-MainAuthor",
-      "address":{
-        "address":"Shenzhen Guangdong China",
-        "postCode":"518000"
-      },
-      "birthDate":"1982-01-30T14:52:39"
-    }
-  },
-  {
-    "price":60.0,
-    "name":"Book14",
-    "mainAuthor":{
-      "name":"Book14-MainAuthor",
-      "address":{
-        "address":"Shenzhen Guangdong China",
-        "postCode":"518000"
-      },
-      "birthDate":"1982-01-30T14:52:39"
-    }
-  },
-  {
-    "price":50.55,
-    "name":"Book15",
-    "mainAuthor":{
-      "name":"Book1-MainAuthor",
-      "address":{
-        "address":"Shenzhen Guangdong China",
-        "postCode":"518000"
-      },
-      "birthDate":"1982-01-30T14:52:39"
-    }
-  },
-  {
-    "price":77.77,
-    "name":"Book3",
-    "mainAuthor":{
-      "name":"Book3-MainAuthor",
-      "address":{
-        "address":"Shenzhen Guangdong China",
-        "postCode":"518005"
-      },
-      "birthDate":"1982-01-30T14:52:39"
-    }
-  }
-  ,
-  {
-    "price":66.66,
-    "name":"Book2",
-    "mainAuthor":{
-      "name":"Book2-MainAuthor",
-      "address":{
-        "address":"Shenzhen Guangdong China",
-        "postCode":"518005"
-      },
-      "birthDate":"1982-01-30T14:52:39"
-    }
-  }
-]
-```
+After executing above codes, all items of the `result` object is a `java.util.LinkedHashMap` instance with 3 entries in below order:
 
-After execution of the sample code, value of result as below(in json format)
-```json
-[
-  {
-    "price":60.0,
-    "name":"Book14",
-    "mainAuthorName":"Book14-MainAuthor"
-  },
-  {
-    "price":53.55,
-    "name":"Book13",
-    "mainAuthorName":"Book13-MainAuthor"
-  },
-  {
-    "price":55.55,
-    "name":"Book1",
-    "mainAuthorName":"Book1-MainAuthor"
-  }
-]
-```
-
-
+* key=price, value=book.getPrice()
+* key=name, value=book.getName()
+* key=mainAuthorName, value=book.getMainAuthor().getName()
 
