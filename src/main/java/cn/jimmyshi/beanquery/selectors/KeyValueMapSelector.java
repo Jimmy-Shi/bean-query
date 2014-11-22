@@ -1,33 +1,11 @@
 package cn.jimmyshi.beanquery.selectors;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import cn.jimmyshi.beanquery.Selector;
-
-public abstract class KeyValueMapSelector implements Selector<Map<String,Object>> {
-
-  @Override
-  public List<Map<String, Object>> select(List<?> from) {
-    if(CollectionUtils.isEmpty(from)){
-      return Collections.emptyList();
-    }
-    return doSelect(from);
-  }
-
-  protected List<Map<String, Object>> doSelect(List<?> notEmptyFrom){
-    List<Map<String,Object>> result=new ArrayList<Map<String,Object>>(notEmptyFrom.size());
-    for (Object item : notEmptyFrom) {
-      result.add(select(item));
-    }
-    return result;
-  }
+public abstract class KeyValueMapSelector extends DefaultSelector<Map<String,Object>> {
 
   @Override
   public Map<String, Object> select(Object item) {

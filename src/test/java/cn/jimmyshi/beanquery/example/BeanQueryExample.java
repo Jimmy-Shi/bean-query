@@ -2,14 +2,17 @@ package cn.jimmyshi.beanquery.example;
 
 import static cn.jimmyshi.beanquery.BeanQuery.*;
 import static org.junit.Assert.assertThat;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import cn.jimmyshi.beanquery.DataLoader;
+import cn.jimmyshi.beanquery.selectors.DefaultSelector;
 
 public class BeanQueryExample {
   private DataLoader dataLoader = new DataLoader();
@@ -224,6 +227,18 @@ public class BeanQueryExample {
     List<Map<String, Object>> result = select("name,price,authorMap(Book1-Author-1).address as book1AuthorAddress")
         .from(mainData).execute();
     dataLoader.assertDataToJsonEqualsExpectedFileContent("testSelectMapNestedProperties.json", result);
+  }
+
+  @Test
+  public void testCustomizedSelector(){
+    List<String> bookNames=select(new DefaultSelector<String>() {
+      @Override
+      public String select(Object item) {
+        return ((Book)item).getName();
+      }
+    }).executeFrom(mainData);
+
+    assertThat(bookNames,containsInAnyOrder("Book1","Book2","Book3"));
   }
 
   @Test

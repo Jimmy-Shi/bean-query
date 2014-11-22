@@ -38,7 +38,7 @@ Bean Query 复用[Apache Commons BeanUtils](http://commons.apache.org/proper/com
 import static cn.jimmyshi.beanquery.BeanQuery.*;
 ```
 
-* 3. 使用下面方法中的一个来创建[BeanQuery](.././src/main/java/cn/jimmyshi/beanquery/BeanQuery.java)实例
+* 3. 使用下面方法中的一个来创建[`BeanQuery<T>`](.././src/main/java/cn/jimmyshi/beanquery/BeanQuery.java)实例
 
 ```java
 public static BeanQuery<Map<String, Object>> select(KeyValueMapSelector... selectors);
@@ -128,7 +128,7 @@ sortedResult=copied;
 List<Book> sortedResult=selectBean(Book.class).orderBy("author.name").executeFrom(bookCollection);
 ```
 假设`bookCollection`中的每个Bean有一个实现了`Comparable`的名称为`author.name`的属性，上面的代码针对每个Bean的`author.name`调用他们的`compareTo`方法来比较从而进行排序
-这个功能其实就是使用一个[ComparableObjectComparator](.././src/main/java/cn/jimmyshi/beanquery/comparators/ComparableObjectComparator.java) 应用在Bean的属性值上进行排序。`ComparableObjectComparator`类的`compare`方法的执行逻辑如下所示：
+这个功能其实就是使用一个[`ComparableObjectComparator`](.././src/main/java/cn/jimmyshi/beanquery/comparators/ComparableObjectComparator.java) 应用在Bean的属性值上进行排序。`ComparableObjectComparator`类的`compare`方法的执行逻辑如下所示：
 
 1. 首先把输入的参数转换为`Comparable`实例（comparable1，comparable2）。 如果输入参数是null或者不是`Comparable`的实现类，则转换结果视为null。
  * 如果转换结果都为null，则返回0
@@ -176,7 +176,7 @@ List<Book> result2=query.asc().executeFrom(bookCollection2);
 过滤是这样实现的：
  
 1. 首先把Hamcrest Matchers 转换成 [commons-collections Predicate](http://commons.apache.org/proper/commons-collections/javadocs/api-release/org/apache/commons/collections4/Predicate.html),
-2. 调用[CollectionUtils.filter](http://commons.apache.org/proper/commons-collections/javadocs/api-release/org/apache/commons/collections4/CollectionUtils.html#filter(java.lang.Iterable, org.apache.commons.collections4.Predicate)) 方法来过滤。
+2. 调用[`CollectionUtils.filter`](http://commons.apache.org/proper/commons-collections/javadocs/api-release/org/apache/commons/collections4/CollectionUtils.html#filter(java.lang.Iterable, org.apache.commons.collections4.Predicate)) 方法来过滤。
   
 更多信息请阅读[Hamcrest matchers](#hamcrest-matchers) 。
 
@@ -273,7 +273,18 @@ List<Map<String, Object>> result = select(allOf(Book.class).except("authorList",
                                          ).from(bookCollection).execute();
 ```
 ### 自定义转换
-通过实现[Selector<T>](.././src/main/java/cn/jimmyshi/beanquery/Selector.java)的一个子类并使用`public static <T> BeanQuery<T> select(Selector<T> selector)`方法来创建BeanQuery实例，就可以实现自定义转换。
+通过实现接口[`Selector<T>`](.././src/main/java/cn/jimmyshi/beanquery/Selector.java)的一个子类并使用`public static <T> BeanQuery<T> select(Selector<T> selector)`方法来创建BeanQuery实例，就可以实现自定义转换。 例子代码如下:
+
+```java
+List<String> bookNames=select(new DefaultSelector<String>() {
+      @Override
+      public String select(Object item) {
+        return ((Book)item).getName();
+      }
+    }).executeFrom(bookCollection);
+```
+
+上面代码中的[`DefaultSelector<T>`](.././src/main/java/cn/jimmyshi/beanquery/selectors/DefaultSelector.java)是`Selector<T>`的一个默认实现。
 
 # <a name="concepts"/>概念
 ## Hamcrest matchers
@@ -282,7 +293,7 @@ Hamcrest是一个用于编写matcher对象来声明式的定义匹配规则的�
 * 教程地址：https://code.google.com/p/hamcrest/wiki/Tutorial
 * 代码仓库: https://github.com/hamcrest/JavaHamcrest
 
-由于`BeanQuery`继承了`org.hamcrest.Matchers`，当你静态导入BeanQuery之后，所有Hamcrest内置的matcher就都可以直接使用了。
+由于`BeanQuery<T>`继承了`org.hamcrest.Matchers`，当你静态导入BeanQuery之后，所有Hamcrest内置的matcher就都可以直接使用了。
 
 ### 一些比较有用的matcher
 下面这些内容是拷贝之Hamcrest的教程的。
@@ -325,7 +336,7 @@ Hamcrest comes with a library of useful matchers. Here are some of the most impo
 * 使用说明： http://commons.apache.org/proper/commons-beanutils/javadocs/v1.9.2/apidocs/org/apache/commons/beanutils/package-summary.html#package_description
 
 ### <a name="beanutils-property-name"/>BeanUtils属性名
-我们大量的使用了BeanUtils的[PropertyUtils.getProperty(Object bean, String name)](http://commons.apache.org/proper/commons-beanutils/javadocs/v1.9.2/apidocs/org/apache/commons/beanutils/PropertyUtils.html#getProperty(java.lang.Object, java.lang.String)) 这个方法。使用这个方法，我们可以很方便在运行时的获取Java Bean基本的、嵌套的、有索引的、映射型的Java Bean的属性值。 
+我们大量的使用了BeanUtils的[`PropertyUtils.getProperty(Object bean, String name)`](http://commons.apache.org/proper/commons-beanutils/javadocs/v1.9.2/apidocs/org/apache/commons/beanutils/PropertyUtils.html#getProperty(java.lang.Object, java.lang.String)) 这个方法。使用这个方法，我们可以很方便在运行时的获取Java Bean基本的、嵌套的、有索引的、映射型的Java Bean的属性值。 
 
 对于这个方法的官方指南是[2.2 Basic Property Access](http://commons.apache.org/proper/commons-beanutils/javadocs/v1.9.2/apidocs/org/apache/commons/beanutils/package-summary.html#standard.basic)和[2.3 Nested Property Access](http://commons.apache.org/proper/commons-beanutils/javadocs/v1.9.2/apidocs/org/apache/commons/beanutils/package-summary.html#standard.nested)这两章。
 

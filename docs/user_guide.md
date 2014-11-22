@@ -38,7 +38,7 @@ This section lead you to go through all important methods of this BeanQuery lib.
 import static cn.jimmyshi.beanquery.BeanQuery.*;
 ```
 
-* 3. Create a [BeanQuery](.././src/main/java/cn/jimmyshi/beanquery/BeanQuery.java) instance with one of the below methods.
+* 3. Create a [`BeanQuery<T>`](.././src/main/java/cn/jimmyshi/beanquery/BeanQuery.java) instance with one of the below methods.
 
 ```java
 public static BeanQuery<Map<String, Object>> select(KeyValueMapSelector... selectors);
@@ -130,7 +130,7 @@ The string object "author.name" is a property name to fetch property values from
 List<Book> sortedResult=selectBean(Book.class).orderBy("author.name").executeFrom(bookCollection);
 ```
 Above codes assume that each item of the `bookCollection` has a comparable property `author.name`. For each `author.name` call their `compareTo` method to compare.
-This function is implemented by providing a [ComparableObjectComparator](.././src/main/java/cn/jimmyshi/beanquery/comparators/ComparableObjectComparator.java) to compare the property value. The `compare` method of this `ComparableObjectComparator` works in the below way:
+This function is implemented by providing a [`ComparableObjectComparator`](.././src/main/java/cn/jimmyshi/beanquery/comparators/ComparableObjectComparator.java) to compare the property value. The `compare` method of this `ComparableObjectComparator` works in the below way:
 
 1. First convert the input objects to comparable instances(comparable1, comparable2). If they are null or not instance of comparable, the converted result is null. 
   * If both converted result are null, return 0. 
@@ -178,7 +178,7 @@ List<Book> result2=query.asc().executeFrom(bookCollection2);
 Filtering is implemented by
  
 1. Converting Hamcrest Matchers to [commons-collections Predicate](http://commons.apache.org/proper/commons-collections/javadocs/api-release/org/apache/commons/collections4/Predicate.html),
-2. Call [CollectionUtils.filter](http://commons.apache.org/proper/commons-collections/javadocs/api-release/org/apache/commons/collections4/CollectionUtils.html#filter(java.lang.Iterable, org.apache.commons.collections4.Predicate)) method
+2. Call [`CollectionUtils.filter`](http://commons.apache.org/proper/commons-collections/javadocs/api-release/org/apache/commons/collections4/CollectionUtils.html#filter(java.lang.Iterable, org.apache.commons.collections4.Predicate)) method
   
 you can read section [Hamcrest matchers](#hamcrest-matchers) for more infomation.
 
@@ -273,7 +273,19 @@ List<Map<String, Object>> result = select(allOf(Book.class).except("authorList",
                                          ).from(bookCollection).execute();
 ```
 ### Customize converting
-By implementing a [Selector<T>](.././src/main/java/cn/jimmyshi/beanquery/Selector.java) instance and create BeanQuery instance by calling the `public static <T> BeanQuery<T> select(Selector<T> selector)` method, You can customize the converting.
+By implementing a instance of interface [`Selector<T>`](.././src/main/java/cn/jimmyshi/beanquery/Selector.java) and create BeanQuery instance by calling the `public static <T> BeanQuery<T> select(Selector<T> selector)` method, You can customize the converting.
+Sample code below:
+
+```java
+List<String> bookNames=select(new DefaultSelector<String>() {
+      @Override
+      public String select(Object item) {
+        return ((Book)item).getName();
+      }
+    }).executeFrom(bookCollection);
+```
+
+The [`DefaultSelector<T>`](.././src/main/java/cn/jimmyshi/beanquery/selectors/DefaultSelector.java) in above code is a default implementation of `Selector<T>`.
 
 # Concepts
 ## Hamcrest matchers
@@ -282,7 +294,7 @@ Hamcrest is a framework for writing matcher objects allowing 'match' rules to be
 * Read [Java Hamcrest Tutorial](https://code.google.com/p/hamcrest/wiki/Tutorial) to learn it.
 * Code repository of Hamcrest matchers: https://github.com/hamcrest/JavaHamcrest.
 
-Since `BeanQuery` is a subclass of the `org.hamcrest.Matchers` class, once you static import the `BeanQuery`, all the Hamcrest built-in matchers are available.
+Since `BeanQuery<T>` is a subclass of the `org.hamcrest.Matchers` class, once you static import the `BeanQuery`, all the Hamcrest built-in matchers are available.
 
 ### Useful matchers
 Below content of this section is copied from the Hamcrest tutorial.
@@ -325,7 +337,7 @@ In this BeanQuery lib, we use `BeanUtils` to fetch property value from bean to c
 * User Guide: http://commons.apache.org/proper/commons-beanutils/javadocs/v1.9.2/apidocs/org/apache/commons/beanutils/package-summary.html#package_description
 
 ### BeanUtils property name
-The feature we used a lot is the [PropertyUtils.getProperty(Object bean, String name)](http://commons.apache.org/proper/commons-beanutils/javadocs/v1.9.2/apidocs/org/apache/commons/beanutils/PropertyUtils.html#getProperty(java.lang.Object, java.lang.String)) method. 
+The feature we used a lot is the [`PropertyUtils.getProperty(Object bean, String name)`](http://commons.apache.org/proper/commons-beanutils/javadocs/v1.9.2/apidocs/org/apache/commons/beanutils/PropertyUtils.html#getProperty(java.lang.Object, java.lang.String)) method. 
 With this method, it is very easy to fetch simple/nested/indexed/mapped property value of a java bean at runtime. 
 
 The official guide of this method is section [2.2 Basic Property Access](http://commons.apache.org/proper/commons-beanutils/javadocs/v1.9.2/apidocs/org/apache/commons/beanutils/package-summary.html#standard.basic) and [2.3 Nested Property Access](http://commons.apache.org/proper/commons-beanutils/javadocs/v1.9.2/apidocs/org/apache/commons/beanutils/package-summary.html#standard.nested).
