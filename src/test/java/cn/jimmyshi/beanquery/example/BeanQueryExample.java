@@ -65,10 +65,19 @@ public class BeanQueryExample {
   }
 
   @Test
+  public void shouldFromBeanMethodWorking(){
+    List<Map<String,Object>> executeFromResult=select("name,price").where(notNullValue()).from(new Object()).execute();
+    assertThat(executeFromResult, hasSize(1));
+    assertThat(executeFromResult.get(0).keySet(),containsInAnyOrder("name","price"));
+  }
+
+  @Test
   public void shouldExecuteFromBeanMethodGetNullWhenNotFilteredResult(){
     Map<String,Object> executeFromResult=select("name,price").where(startsWith("abc")).executeFrom(new Object());
     assertThat(executeFromResult, nullValue());
   }
+
+
 
   @Test
   public void shouldOnlyBook1InResult(){
