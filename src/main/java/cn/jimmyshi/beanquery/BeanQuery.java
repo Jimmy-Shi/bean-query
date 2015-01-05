@@ -26,10 +26,10 @@ import cn.jimmyshi.beanquery.selectors.PropertySelector;
 import cn.jimmyshi.beanquery.selectors.StringSelector;
 
 /**
- * Entry of the BeanQuery. Typical usage is as below. <code>
+ * Entry of the BeanQuery. Typical usage is as below.
  * <pre>
  * import static cn.jimmyshi.beanquery.BeanQuery.*;
- * List&lt;Map&lt;String,Object>> result=select("name,price,mainAuthor.name as authorName")
+ * List&lt;Map&lt;String,Object&gt;&gt; result=select("name,price,mainAuthor.name as authorName")
  *                                 .from(collectionOfBooks)
  *                                 .where(
  *                                    anyOf(
@@ -44,7 +44,6 @@ import cn.jimmyshi.beanquery.selectors.StringSelector;
  *                                 .orderBy("name").desc()
  *                                 .execute();
  * </pre>
- * </code>
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public final class BeanQuery<T> extends BeanQueryCustomizedMatchers {
@@ -215,9 +214,9 @@ public final class BeanQuery<T> extends BeanQueryCustomizedMatchers {
 
   /**
    * Create a BeanQuery instance with select String, the select String is in
-   * format "propertyName[ as alias][,propertyName[ as alias]]". For example:<br/>
+   * format "propertyName[ as alias][,propertyName[ as alias]]". For example:<br>
    * <code>BeanQuery beanQuery=select("name, price as p, address.officeAddress as address");</code>
-   * </br>When executing the BeanQuery instance created in above code will
+   * When executing the BeanQuery instance created in above code will
    * return a list of map with 3 keys:[name,p,address].
    */
   public static BeanQuery<Map<String, Object>> select(String selectString) {
@@ -226,9 +225,9 @@ public final class BeanQuery<T> extends BeanQueryCustomizedMatchers {
 
   /**
    * Create a BeanQuery instance with some propertyString, a property string is
-   * in format "propertyName[ as alias]". For example:</br>
+   * in format "propertyName[ as alias]". For example:<br>
    * <code>BeanQuery beanQuery=select("name","price as p", "address.officeAddress as address");</code>
-   * <br/>
+   * <br>
    * When executing the BeanQuery instance created in above code will return a
    * list of map with 3 keys:[name,p,address].
    */
@@ -261,7 +260,7 @@ public final class BeanQuery<T> extends BeanQueryCustomizedMatchers {
    * <li><code>public String getName()</code> for property name.</li>
    * <li><code>public boolean isActive()</code> for property active</li>
    * </ul>
-   * Usage sample:<br/>
+   * Usage sample:<br>
    * <code>
    * BeanQuery beanQuery=select(allOf(Book.class).except("authorList","authorMap"));
    * </code>
@@ -271,7 +270,7 @@ public final class BeanQuery<T> extends BeanQueryCustomizedMatchers {
   }
 
   /**
-   * Create a PropertySelector with the property name. Code sample below:<br/>
+   * Create a PropertySelector with the property name. Code sample below:<br>
    * <code>
    * BeanQuery beanQuery=select(property("name"), property("price"), property("price").as("p"));
    * </code>
@@ -282,7 +281,7 @@ public final class BeanQuery<T> extends BeanQueryCustomizedMatchers {
 
   /**
    * Create a matcher to apply on the property of the from items.Code sample
-   * below:<br/>
+   * below:<br>
    * <code>
    * BeanQuery beanQuery=select(allOf(Book.class)).from(bookList).where(value("name",startsWith("Book1")));
    * </code>

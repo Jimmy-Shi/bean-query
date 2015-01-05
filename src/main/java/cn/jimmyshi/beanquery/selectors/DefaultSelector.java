@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import cn.jimmyshi.beanquery.Selector;
 
 /**
- * Selector that implemented the select(List<?> from) methods.
+ * Selector that implemented the select(List&lt;?&gt; from) methods.
  */
 public abstract class DefaultSelector<T> implements Selector<T> {
   private transient Logger logger = LoggerFactory.getLogger(DefaultSelector.class);
