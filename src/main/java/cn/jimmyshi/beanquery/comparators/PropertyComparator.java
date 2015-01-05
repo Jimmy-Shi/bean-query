@@ -11,7 +11,7 @@ import cn.jimmyshi.beanquery.DefaultNullValuePropertyValueGetter;
 
 @SuppressWarnings("rawtypes")
 public class PropertyComparator implements Comparator {
-  private final static Logger logger = LoggerFactory.getLogger(PropertyComparator.class);
+  private transient Logger logger = LoggerFactory.getLogger(PropertyComparator.class);
   private final String propertyName;
   private final Comparator comparator;
 
@@ -38,7 +38,7 @@ public class PropertyComparator implements Comparator {
 
   @Override
   public String toString() {
-    return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE,false);
   }
 
 }

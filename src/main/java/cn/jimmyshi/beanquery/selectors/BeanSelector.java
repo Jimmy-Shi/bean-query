@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class BeanSelector<T> extends DefaultSelector<T> {
-  private final static Logger logger = LoggerFactory.getLogger(BeanSelector.class);
+  private transient Logger logger = LoggerFactory.getLogger(BeanSelector.class);
   private Class<T> itemClass;
 
   public BeanSelector(Class<T> itemClass) {

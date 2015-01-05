@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
  * you can use the {@link #add(String...)} method to add it in the result map.
  */
 public class ClassSelector extends KeyValueMapSelector {
-  private final static Logger logger = LoggerFactory.getLogger(ClassSelector.class);
+  private transient Logger logger = LoggerFactory.getLogger(ClassSelector.class);
   private List<PropertySelector> propertySelectors = new LinkedList<PropertySelector>();
   private CompositeSelector compositeSelector = new CompositeSelector();
 

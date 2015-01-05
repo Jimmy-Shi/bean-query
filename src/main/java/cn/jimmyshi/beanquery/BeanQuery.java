@@ -48,7 +48,7 @@ import cn.jimmyshi.beanquery.selectors.StringSelector;
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public final class BeanQuery<T> extends BeanQueryCustomizedMatchers {
-  private static final Logger logger = LoggerFactory.getLogger(BeanQuery.class);
+  private transient Logger logger = LoggerFactory.getLogger(BeanQuery.class);
   private final Selector<T> selector;
   private Collection from;
   private Predicate predicate = TruePredicate.truePredicate();

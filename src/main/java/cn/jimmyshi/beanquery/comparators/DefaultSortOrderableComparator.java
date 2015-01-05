@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public abstract class DefaultSortOrderableComparator<T> implements SortOrderableComparator<T> {
-  private final static Logger logger = LoggerFactory.getLogger(DefaultSortOrderableComparator.class);
+  private transient Logger logger = LoggerFactory.getLogger(DefaultSortOrderableComparator.class);
   private boolean desc = false;
 
   @Override

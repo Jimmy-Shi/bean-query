@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("rawtypes")
 public class ComparableObjectComparator implements Comparator {
-  private static final Logger logger = LoggerFactory.getLogger(ComparableObjectComparator.class);
+  private transient Logger logger = LoggerFactory.getLogger(ComparableObjectComparator.class);
 
   /**
    * <ol>

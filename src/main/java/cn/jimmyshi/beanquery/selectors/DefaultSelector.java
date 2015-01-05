@@ -14,7 +14,7 @@ import cn.jimmyshi.beanquery.Selector;
  * Selector that implemented the select(List<?> from) methods.
  */
 public abstract class DefaultSelector<T> implements Selector<T> {
-  private final static Logger logger = LoggerFactory.getLogger(DefaultSelector.class);
+  private transient Logger logger = LoggerFactory.getLogger(DefaultSelector.class);
 
   @Override
   public List<T> select(List<?> from) {

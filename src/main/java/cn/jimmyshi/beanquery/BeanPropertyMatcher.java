@@ -8,9 +8,8 @@ import org.hamcrest.Matcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 public class BeanPropertyMatcher<T> extends BaseMatcher<T> {
-  private final static Logger logger = LoggerFactory.getLogger(BeanPropertyMatcher.class);
+  private transient Logger logger = LoggerFactory.getLogger(BeanPropertyMatcher.class);
   private String property;
   private Matcher<?> matcher;
 
@@ -33,7 +32,7 @@ public class BeanPropertyMatcher<T> extends BaseMatcher<T> {
 
   @Override
   public String toString() {
-    return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE, false);
   }
 
   @Override

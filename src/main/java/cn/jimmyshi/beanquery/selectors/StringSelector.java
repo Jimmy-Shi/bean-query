@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
  * Selector to support create property selector via String parameter.
  */
 public class StringSelector extends KeyValueMapSelector {
-  private static final Logger logger = LoggerFactory.getLogger(StringSelector.class);
+  private transient Logger logger = LoggerFactory.getLogger(StringSelector.class);
   private CompositeSelector compositeSelector = new CompositeSelector();
 
   /**
