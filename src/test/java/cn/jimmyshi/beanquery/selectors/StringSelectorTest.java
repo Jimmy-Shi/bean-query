@@ -17,6 +17,18 @@ public class StringSelectorTest extends SelectorTestBase{
   }
 
   @Test
+  public void testStringContainsAsButItisNotAlias(){
+    StringSelector selector=new StringSelector("task,abc");
+    assertSelectResultKeys(selector, "task","abc");
+  }
+
+  @Test
+  public void testStringContaningMultipleAs(){
+    StringSelector selector=new StringSelector("task as it as m, abc");
+    assertSelectResultKeys(selector, "it as m", "abc");
+  }
+
+  @Test
   public void testStringConstructorWithMultipleProperties(){
     StringSelector selector=new StringSelector("abc,, abc as edf,");
     assertSelectResultKeys(selector, "abc","edf");

@@ -57,7 +57,7 @@ public class StringSelector extends KeyValueMapSelector {
   }
 
   private PropertySelector createPropertySelector(String propertyString) {
-    String[] propertyTokens = StringUtils.splitByWholeSeparator(propertyString, "as", 2);
+    String[] propertyTokens = StringUtils.splitByWholeSeparator(propertyString, " as ", 2);
     final PropertySelector propertySelector;
     String propertySelectorPropertyName = propertyTokens[0].trim();
     if (propertyTokens.length == 2) {
