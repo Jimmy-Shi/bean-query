@@ -240,8 +240,19 @@ public final class BeanQuery<T> extends BeanQueryCustomizedMatchers {
    * function. If you just want to filter bean collection, sort bean collection
    * and want to get the execute result as a list of beans, you should use this
    * method to create a BeanQuery instance.
+   * @deprecated use {@link #select(Class)} method instead
    */
   public static <T> BeanQuery<T> selectBean(Class<T> beanClass) {
+    return new BeanQuery<T>(new BeanSelector<T>(beanClass));
+  }
+
+  /**
+   * Create a BeanQuery instance without the function of convert result into Map
+   * function. If you just want to filter bean collection, sort bean collection
+   * and want to get the execute result as a list of beans, you should use this
+   * method to create a BeanQuery instance.
+   */
+  public static <T> BeanQuery<T> select(Class<T> beanClass) {
     return new BeanQuery<T>(new BeanSelector<T>(beanClass));
   }
 

@@ -42,13 +42,13 @@ public class BeanQueryExample {
 
   @Test
   public void shouldBooksShortedByNameDesc(){
-    List<Book> sortedBooks = selectBean(Book.class).from(mainData).orderBy("name").desc().execute();
+    List<Book> sortedBooks = select(Book.class).from(mainData).orderBy("name").desc().execute();
     dataLoader.assertDataToJsonEqualsExpectedFileContent("shouldBooksShortedByName.json", sortedBooks);
   }
 
   @Test
   public void shouldExecuteFromMethodsWorking(){
-    List<Book> sortedBooks = selectBean(Book.class).orderBy("name").desc().executeFrom(mainData);
+    List<Book> sortedBooks = select(Book.class).orderBy("name").desc().executeFrom(mainData);
     dataLoader.assertDataToJsonEqualsExpectedFileContent("shouldBooksShortedByName.json", sortedBooks);
   }
 
@@ -80,11 +80,9 @@ public class BeanQueryExample {
     assertThat(executeFromResult, nullValue());
   }
 
-
-
   @Test
   public void shouldOnlyBook1InResult(){
-    List<Book> result=selectBean(Book.class).from(mainData).where(value("name", is("Book1"))).execute();
+    List<Book> result=select(Book.class).from(mainData).where(value("name", is("Book1"))).execute();
     assertThat(result,hasSize(1));
     assertThat(result.get(0).getName(),is("Book1"));
   }
