@@ -44,7 +44,7 @@ import static cn.jimmyshi.beanquery.BeanQuery.*;
 public static BeanQuery<Map<String, Object>> select(KeyValueMapSelector... selectors);
 public static BeanQuery<Map<String, Object>> select(String selectString);
 public static BeanQuery<Map<String, Object>> select(String... propertyStrings);
-public static <T> BeanQuery<T> selectBean(Class<T> beanClass);
+public static <T> BeanQuery<T> select(Class<T> beanClass);
 public static <T> BeanQuery<T> select(Selector<T> selector);
 ```
 
@@ -90,7 +90,7 @@ Map<String,Object> result=select("name,price").where(value("name",startsWith("ab
 Bean Query使得Java Bean集合的排序变得简单。当前支持三种排序方式。
 ### 使用应用在Bean上的Comparator来排序
 ```java
-List<Book> sortedResult=selectBean(Book.class).orderBy(yourComparator).executeFrom(bookCollection);
+List<Book> sortedResult=select(Book.class).orderBy(yourComparator).executeFrom(bookCollection);
 ```
 上面的代码使用`yourComparator`对`bookCollection`进行排序。它和下面的这些代码有同样的效果：
 ```java
@@ -100,7 +100,7 @@ sortedResult=copied;
 ```
 ### 使用应用在Bean属性上的Comparator来排序
 ```java
-List<Book> sortedResult=selectBean(Book.class).orderBy("author.name",beanPropertyComparator).executeFrom(bookCollection);
+List<Book> sortedResult=select(Book.class).orderBy("author.name",beanPropertyComparator).executeFrom(bookCollection);
 ```
 上面的代码针对`beanPropertyComparator`Bean集合中的每个Bean的`author.name`属性值来进行排序。它和下面的这些代码有同样的效果：
 ```java
@@ -125,7 +125,7 @@ sortedResult=copied;
 字符串 "author.name" 是一个用于从Bean中获取属性值的属性名，阅读章节[BeanUtils属性名](#beanutils-property-name) 以获取更多信息。
 ### 使用Bean的Comparable的属性来排序
 ```java
-List<Book> sortedResult=selectBean(Book.class).orderBy("author.name").executeFrom(bookCollection);
+List<Book> sortedResult=select(Book.class).orderBy("author.name").executeFrom(bookCollection);
 ```
 假设`bookCollection`中的每个Bean有一个实现了`Comparable`的名称为`author.name`的属性，上面的代码针对每个Bean的`author.name`调用他们的`compareTo`方法来比较从而进行排序
 这个功能其实就是使用一个[`ComparableObjectComparator`](.././src/main/java/cn/jimmyshi/beanquery/comparators/ComparableObjectComparator.java) 应用在Bean的属性值上进行排序。`ComparableObjectComparator`类的`compare`方法的执行逻辑如下所示：
@@ -140,7 +140,7 @@ List<Book> sortedResult=selectBean(Book.class).orderBy("author.name").executeFro
 ### 正序和逆序
 在上面所述的这些排序中，默认情况下都视为正序，你可以使用`desc()`方法来逆转顺序。例子代码如下所示：
 ```java
-List<Book> sortResult=selectBean(Book.class).orderBy("author.name",beanPropertyComparator).desc().executeFrom(bookCollection);
+List<Book> sortResult=select(Book.class).orderBy("author.name",beanPropertyComparator).desc().executeFrom(bookCollection);
 ```
 上面的代码是下面代码的简化：
 ```java
@@ -163,12 +163,12 @@ sortedResult=copied;
 ```
 `desc()`方法也可以用于其他的排序方式，如下所示：
 ```java
-List<Book> sortResult=selectBean(Book.class).orderBy(yourComparator).desc().executeFrom(bookCollection);
-List<Book> sortResult=selectBean(Book.class).orderBy("author.name").desc().executeFrom(bookCollection);
+List<Book> sortResult=select(Book.class).orderBy(yourComparator).desc().executeFrom(bookCollection);
+List<Book> sortResult=select(Book.class).orderBy("author.name").desc().executeFrom(bookCollection);
 ```
 我们还提供了一个`asc()`方法用于抵消`desc()`方法，因此你可以使用不同的顺序来对不用的Bean集合进行排序。示例代码如下：
 ```java
-BeanQuery query=selectBean(Book.class).orderBy(yourComparator).desc();
+BeanQuery query=select(Book.class).orderBy(yourComparator).desc();
 List<Book> result1=query.executeFrom(bookCollection1);
 List<Book> result2=query.asc().executeFrom(bookCollection2);
 ```
@@ -182,7 +182,7 @@ List<Book> result2=query.asc().executeFrom(bookCollection2);
 
 Bean Query允许用户使用Hamcrest Matchers来对Bean集合进行过滤。Hamcrest Matchers可以应用在Bean本身也可以应用是Bean属性上。
 ```java
-List<Book> result=selectBean(Book.class)
+List<Book> result=select(Book.class)
                   .where(
                       //for books name is Book2 or starts with Book1
                       anyOf(value("name", startsWith("Book1")), value("name", is("Book2"))),
@@ -203,13 +203,13 @@ Bean Query可以用于把排序/过滤过的Bean（集合）转换成一种其�
 
 ### 转换成特定的Java类型
 ```java
-List<Book> sortResult=selectBean(Book.class).executeFrom(bookCollection);
+List<Book> sortResult=select(Book.class).executeFrom(bookCollection);
 ```
 上面的代码把bookCollection转换成一个子项为`Book`类型的列表。对于bookCollection中非`Book`及其子类的对象，其转换结果为null。
 
 如果你不想改变子项的类型，只是对对象集合进行过滤、排序的话，那么你可以使用`Object.class`来创建BeanQuery实例。代码如下所示:
 ```java
-BeanQuery<Object> beanQuery=selectBean(Object.class);
+BeanQuery<Object> beanQuery=select(Object.class);
 ```
 ### 转换成Map对象
 使用转换成Map对象这个功能，你可以抽取对象（集合中）对象的（嵌套的）属性形成Map对象（列表）。
@@ -263,6 +263,30 @@ List<Map<String, Object>> result = select(property("name"), property("price"), p
 字符串"name"，"price"和"mainAuthor"是用于获取Java Bean的属性名称，请阅读[BeanUtils属性名](#beanutils-property-name)以获取更多信息。
 
 字符"as"是用于隔离属性名称和别名的，必须是全小写的。
+
+#### 具有同样前缀的属性或者别名合成在一个Map中
+```java
+List<Map<String,Object>> result= select("price,name,mainAuthor.name as author.name, mainAuthor.address as author.address").executeFrom(bookCollection);
+```
+上面这行代码执行完之后`result` 列表中的每个Map都由下面的这四个Entry组成：
+
+* key=name, value=book.getName()
+* key=price, value=book.getPrice()
+* key=author.name, value=book.getMainAuthor().getName()
+* key=author.address, value=book.getMainAuthor().getAddress()
+
+如果我们想把上面的`author.name`和`author.aaddress`放到同一个Map中，我们可以调用`nested()`方法，如下所示：
+
+```java
+List<Map<String,Object>> result= select("price,name,mainAuthor.name as author.name, mainAuthor.address as author.address").nested().executeFrom(bookCollection);
+```
+上面这行代码执行完之后`result` 列表中的每个Map都由下面的这三个Entry组成：
+
+* key=name, value=book.getName()
+* key=price, value=book.getPrice()
+* key=author, value=一个Map,内容如下：
+ * key=name, value=book.getMainAuthor().getName()
+ * key=address, value=book.getMainAuthor().getAddress()
 
 #### 混合使用Selector把对象转换成Map
 可以混合使用基于Java类型的Selector和属性别名的Selector，比如：

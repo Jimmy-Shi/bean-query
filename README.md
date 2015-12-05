@@ -20,7 +20,8 @@ import static cn.jimmyshi.beanquery.BeanQuery.*;
 
 
 //使用 select、from、where、orderBy、desc和asc来组装一个Query，然后执行execute方法来获得结果。
-List<Map<String, Object>> result = select("price,name,mainAuthor.name as mainAuthorName")
+List<Map<String, Object>> result = select("price,name,mainAuthor.name, authors[1].name as secondAuthor.name")
+    .nested()
     .from(bookCollection)
     .where(
         //选择name属性值是"Book2"或者以“Book1”开头
@@ -41,5 +42,6 @@ List<Map<String, Object>> result = select("price,name,mainAuthor.name as mainAut
 
 * key=price, value=book.getPrice()
 * key=name, value=book.getName()
-* key=mainAuthorName, value=book.getMainAuthor().getName()
+* Key=mainAuthor, value=a map with { key=name, value=book.getMainAuthor().getName() }
+* key=secondsAuthor, value=a map with { key=name,  value=book.getAuthors().get(1).getName() }
 

@@ -19,7 +19,8 @@ import static cn.jimmyshi.beanquery.BeanQuery.*;
 
 
 //use select/from/where/orderBy/desc/asc to composite a query and execute it to get the result
-List<Map<String, Object>> result = select("price,name,mainAuthor.name as mainAuthorName")
+List<Map<String, Object>> result = select("price,name,mainAuthor.name, authors[1].name as secondAuthor.name")
+    .nested()
     .from(bookCollection)
     .where(
         //select books that name is Book2 or starts with Book1
@@ -40,5 +41,6 @@ After executing above codes, all items of the `result` object is a `java.util.Li
 
 * key=price, value=book.getPrice()
 * key=name, value=book.getName()
-* key=mainAuthorName, value=book.getMainAuthor().getName()
+* Key=mainAuthor, value=a map with { key=name, value=book.getMainAuthor().getName() }
+* key=secondsAuthor, value=a map with { key=name,  value=book.getAuthors().get(1).getName() }
 

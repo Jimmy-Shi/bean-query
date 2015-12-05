@@ -264,6 +264,32 @@ The string objects "name", "price", "mainAuthor" are property names to fetch pro
 
 The token "as" is a separator between property name and alias, it is case sensitive.
 
+#### Compose properties or alias with same prefix into a map
+
+```java
+List<Map<String,Object>> result= select("price,name,mainAuthor.name as author.name, mainAuthor.address as author.address").executeFrom(bookCollection);
+```
+After executing above line of code, all items of the `result` object is a `LinkedHashMap` instance with 4 entries:
+
+* key=name, value=book.getName()
+* key=price, value=book.getPrice()
+* key=author.name, value=book.getMainAuthor().getName()
+* key=author.address, value=book.getMainAuthor().getAddress()
+
+If we want to compose `author.name` and `author.address` into a map, we can call the nested() method, as shown below:
+
+```java
+List<Map<String,Object>> result= select("price,name,mainAuthor.name as author.name, mainAuthor.address as author.address").nested().executeFrom(bookCollection);
+```
+
+After executing above line of code, all items of the `result` object is a `LinkedHashMap` instance with 3 entries:
+
+* key=name, value=book.getName()
+* key=price, value=book.getPrice()
+* key=author, value=A LinkedHashMap with below items:
+ * key=name, value=book.getMainAuthor().getName()
+ * key=address, value=book.getMainAuthor().getAddress()
+
 #### Converting to Map with mixed selectors
 You can mix the java class based selector and property selector together. For example:
 ```java
