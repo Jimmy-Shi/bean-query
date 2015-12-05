@@ -1,5 +1,7 @@
 package cn.jimmyshi.beanquery.selectors;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,6 +34,11 @@ public class BeanSelector<T> extends DefaultSelector<T> {
     }
     logger.debug("item [{}] is not assignable to class [{}], returning null", item, itemClass);
     return null;
+  }
+
+  @Override
+  public String toString() {
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE,false);
   }
 
 }
