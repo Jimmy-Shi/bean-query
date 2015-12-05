@@ -284,4 +284,13 @@ public class BeanQueryExample {
             .execute();
     dataLoader.assertDataToJsonEqualsExpectedFileContent("testUsingMultipleWhereConditions.json", result);
   }
+
+  @Test
+  public void testNestedResultFeature() {
+    List<Map<String, Object>> result = select(
+        "name,price,authorMap(Book1-Author-1).address.address as author.address, authorMap(Book1-Author-1).address.postCode as author.postCode")
+            .nested().from(mainData).execute();
+    dataLoader.assertDataToJsonEqualsExpectedFileContent("testNestedResultFeature.json", result);
+
+  }
 }

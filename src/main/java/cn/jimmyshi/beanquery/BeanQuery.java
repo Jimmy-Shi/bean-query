@@ -22,6 +22,7 @@ import cn.jimmyshi.beanquery.selectors.BeanSelector;
 import cn.jimmyshi.beanquery.selectors.ClassSelector;
 import cn.jimmyshi.beanquery.selectors.CompositeSelector;
 import cn.jimmyshi.beanquery.selectors.KeyValueMapSelector;
+import cn.jimmyshi.beanquery.selectors.NestedKeyValueMapSelector;
 import cn.jimmyshi.beanquery.selectors.PropertySelector;
 import cn.jimmyshi.beanquery.selectors.StringSelector;
 
@@ -56,6 +57,24 @@ public final class BeanQuery<T> extends BeanQueryCustomizedMatchers {
 
   private BeanQuery(Selector<T> selector) {
     this.selector = selector;
+  }
+
+  /**
+   * Convert the select into a NestedKeyValueMapSelector.<br>
+   * Note<br>:
+   * This method is only available for BeanQueries with a KeyValuMapSelector. Calling this method on a BeanQeury with other types of selector will cause a IllegalStateExcewption.
+   *
+   */
+  public BeanQuery<Map<String,Object>> nested(){
+    if(!(this.selector instanceof KeyValueMapSelector)){
+      throw new IllegalStateException("This is only for BeanQueries which has a KeyValueMapSelector selector. The current selector is a "+this.selector);
+    }
+    BeanQuery<Map<String,Object>> result= new BeanQuery<Map<String,Object>>(new NestedKeyValueMapSelector((KeyValueMapSelector)this.selector));
+    result.from=this.from;
+    result.predicate=this.predicate;
+    result.comparator=this.comparator;
+    result.descSorting=this.descSorting;
+    return result;
   }
 
   /**
