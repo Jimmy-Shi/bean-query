@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.ComparatorUtils;
 import org.apache.commons.collections4.Predicate;
 import org.apache.commons.collections4.functors.TruePredicate;
 import org.hamcrest.Matcher;
@@ -151,6 +152,14 @@ public final class BeanQuery<T> extends BeanQueryCustomizedMatchers {
   }
 
   /**
+   * Using an array of Comparators, applied in sequence until one returns not equal or the array is exhausted.
+   */
+  public BeanQuery<T> orderBy(Comparator... beanComparator) {
+    this.comparator = new DelegatedSortOrderableComparator(ComparatorUtils.chainedComparator(beanComparator));
+    return this;
+  }
+
+  /**
    * Sort the result in DESC order. The default ordering is ASC order. If the
    * {@link #orderBy(String)} is not specified, calling this method does not
    * affect anything.
@@ -168,6 +177,14 @@ public final class BeanQuery<T> extends BeanQueryCustomizedMatchers {
   public BeanQuery<T> asc() {
     this.descSorting = false;
     return this;
+  }
+
+  /**
+   * Create a Comparator base on a property.
+   */
+  public static SortOrderableComparator<?> orderByProperty(String propertyName){
+    return new DelegatedSortOrderableComparator(new PropertyComparator(propertyName,
+        new ComparableObjectComparator()));
   }
 
   /**

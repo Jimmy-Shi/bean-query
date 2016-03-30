@@ -139,6 +139,14 @@ This function is implemented by providing a [`ComparableObjectComparator`](.././
 2. Then return comparable1.compareTo(comparable2) 
 3. If there is an exception in the above step, return 0 as the result 
 
+### Multiple Comparators
+
+```java
+List<Book> sortedResult=select(Book.class).orderBy(orderByProperty("author.name").desc(), orderByProperty("bookName"),yourOwnComparator).executeFrom(bookCollection);
+```
+Code above compares items with their `author.name` property in DESC direction, if the result is equal, will compare with their `bookName` in ASC direction, and apply the `yourOwnComparator` comparator.
+
+
 ### DESC & ASC Sorting
 For all sorting methods, the default sorting way is considered as `ASC` sorting, you can easily revert the sort method by calling `desc()` method. Sample code as below:
 ```java

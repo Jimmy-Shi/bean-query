@@ -137,6 +137,13 @@ List<Book> sortedResult=select(Book.class).orderBy("author.name").executeFrom(bo
 2. 然后返回comparable1.compareTo(comparable2)
 3. 如果在上面的步骤中有异常发生，则返回0。
 
+### 使用多个Comparator
+
+```java
+List<Book> sortedResult=select(Book.class).orderBy(orderByProperty("author.name").desc(), orderByProperty("bookName"),yourOwnComparator).executeFrom(bookCollection);
+```
+上面的代码先使用默认`author.name`进行倒序比较，如果比较结果是一致的话，再使用`bookName`进行正序比较，如果还一致的话，就使用自定义的`yourOwnComparator`进行比较。
+
 ### 正序和逆序
 在上面所述的这些排序中，默认情况下都视为正序，你可以使用`desc()`方法来逆转顺序。例子代码如下所示：
 ```java

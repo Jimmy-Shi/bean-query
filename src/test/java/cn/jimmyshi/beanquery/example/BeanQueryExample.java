@@ -194,6 +194,20 @@ public class BeanQueryExample {
   }
 
   @Test
+  public void testChainedOrderByProperties(){
+    List<Map<String, Object>> result = select("name,price,mainAuthor")
+        .from(dataLoader.loadSourceData("forChainedOrder.json")).orderBy(orderByProperty("price"),orderByProperty("name").desc()).execute();
+    dataLoader.assertDataToJsonEqualsExpectedFileContent("testChainedOrderByProperties.json", result);
+  }
+
+  @Test
+  public void testChainedOrderByPropertiesDesc(){
+    List<Map<String, Object>> result = select("name,price,mainAuthor")
+        .from(dataLoader.loadSourceData("forChainedOrder.json")).orderBy(orderByProperty("price"),orderByProperty("name").desc()).desc().execute();
+    dataLoader.assertDataToJsonEqualsExpectedFileContent("testChainedOrderByPropertiesDesc.json", result);
+  }
+
+  @Test
   public void testSelectNullProperties() {
     List<Map<String, Object>> result = select("name,price,mainAuthor,authorList").from(
         dataLoader.loadSourceData("withoutAuthorMapAndList.json")).execute();
